@@ -174,7 +174,7 @@ Below we will go over some basic ways into interact with the CRS in `{sf}`.
 
 We saw that the `acsTractsPHL.2016.sf` object has a CRS of `NAD83` when we inspected it. This CRS was automatically set by `{tidycensus}` because it knows where the data comes from. This will not always be the case! A format with a shapefile that has CRS information in the metadata will likely assign properly, but if you load a CSV with point coordinates, `{sf}` will not guess as to which CRS it is. We will see how to assign a CRS soon.
 
-To get a more in depth view of the CRS information in `acsTractsPHL.2016.sf` we use the `st_csr` function in `{sf}`.
+To get a more in depth view of the CRS information in `acsTractsPHL.2016.sf` we use the `st_crs` function in `{sf}`.
 
 *Note: the majority of functions you will use in the `{sf}` package start with the prefix `st_`. This is a convention from spatial databases and used by `{sf}` for consistency.*
 
@@ -259,7 +259,7 @@ tm_shape(acsTractsPHL.2016.sf_WGS84,
          projection = st_crs(acsTractsPHL.2016.sf_WGS84)) +
   tm_fill() +
   tm_borders() +
-  tm_layout(title= 'USA Contiguous albers', 
+  tm_layout(title= 'WGS84', 
             title.position = c('left', 'top'))
 ```
 
@@ -370,7 +370,7 @@ head(GEOID_Coords)
 
 Finally, with the `GEOID_Coords` data.frame above, we have simple table the has our ID column as `GEOID` and X/Y point coordinates. This is itself, not an `sf` object, but it contains spatial information in coordinate form. WIth this we can make any other non-spatial table into an `sf` object as long as it has the `GEOID` column.
 
-The example below pretends that `new_nonspatial_data` is some data we just loaded that has the `GEOID`, but no additional spatial information. We go on to further modify that table with a filer and a sort so that it no longer has the same number of rows or same order as before. Our approach of using `cbind` to add the geometry would fail here. Fortunately, we can use the power of [table joins](https://stat545.com/join-cheatsheet.html) to help. Here we use `left_join()` to only join the lat/lon coordinates that match the `GEOID` in the filtered/sorted table. We specify to join on the `GEOID` field with `by = "GEOID"`. Then we use `st_as_sf()` as we had before to make normal table into an `sf` object with the correct CRS. Finally, we use `st_transform()` to reproject it to a coordinate system for mapping with out other data.
+The example below pretends that `new_nonspatial_data` is some data we just loaded that has the `GEOID`, but no additional spatial information. We go on to further modify that table with a filter and a sort so that it no longer has the same number of rows or same order as before. Our approach of using `cbind` to add the geometry would fail here. Fortunately, we can use the power of [table joins](https://stat545.com/join-cheatsheet.html) to help. Here we use `left_join()` to only join the lat/lon coordinates that match the `GEOID` in the filtered/sorted table. We specify to join on the `GEOID` field with `by = "GEOID"`. Then we use `st_as_sf()` as we had before to make normal table into an `sf` object with the correct CRS. Finally, we use `st_transform()` to reproject it to a coordinate system for mapping with out other data.
 
 ```{r}
 new_nonspatial_data <- st_drop_geometry(acsTractsPHL.2016.sf) 
