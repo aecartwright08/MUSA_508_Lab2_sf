@@ -1,6 +1,8 @@
 
 # MUSA_508_Lab2
 
+testing whether aecartwright08 made any meaningful changes...
+
 The goal of MUSA_508_Lab2 is to:
 
 * Learn the basics of working with GitHub
